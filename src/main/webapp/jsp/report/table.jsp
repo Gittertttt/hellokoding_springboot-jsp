@@ -6,13 +6,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <head>
     <title>表格</title>
     <style>
         .fixed-table-box{
-            /*width: 800px;*/
-            margin: 50px auto;
+            width: auto;
+            margin: 100px auto;
         }
         .fixed-table-box>.fixed-table_body-wraper{/*内容了表格主体内容有纵向滚动条*/
             max-height: 260px;
@@ -20,11 +21,6 @@
 
         .fixed-table_fixed>.fixed-table_body-wraper{/*为了让两侧固定列能够同步表格主体内容滚动*/
             max-height: 240px;
-        }
-
-        .table_self_define {
-            width: 1800px;
-            height: 1000px;
         }
 
         <%-- 表格滚动 --%>
@@ -38,7 +34,6 @@
 
         <%-- 设置 行内内容长度 --%>
         th td {
-            /*width: 80px;*/
             /*box-sizing: border-box;*/
             /*overflow: hidden;*/
             /*white-space: nowrap;*/
@@ -72,97 +67,24 @@
     <link rel="stylesheet" href="../../resources/css/fixed-table.css">
     <script type="text/javascript" src="../../resources/js/jquery/jquery-3.6.4.js"></script>
     <script src="../../resources/js/jquery/fixed-table.js"></script>
-    <%--<script type="text/javascript">--%>
-    <%--    // 判断浏览器是否支持sticky 属性--%>
-    <%--    var sticky = (function () {--%>
-    <%--        var vendorList = ['', '-webkit-', '-ms-', '-moz-', '-o-'],--%>
-    <%--            vendorListLength = vendorList.length,--%>
-    <%--            stickyElement = document.createElement('div');--%>
-    <%--        for (var i = 0; i < vendorListLength; i++) {--%>
-    <%--            stickyElement.style.position = vendorList[i] + 'sticky';--%>
-    <%--            console.log('stickyElement',stickyElement)--%>
-    <%--            if (stickyElement.style.position !== '') {--%>
-    <%--                return true;--%>
-    <%--            }--%>
-    <%--        }--%>
-    <%--        return false;--%>
-    <%--    })();--%>
-
-    <%--    // 设置元素的fiexd属性--%>
-    <%--    function divFixedTop (ele,top) {--%>
-    <%--        let scrollTop = $(window).scrollTop() + top;  //滚动条的位置加上当前元素的fixed的top值(用来动态设置fixed的top值的触发点)--%>
-    <%--        let parentTop = $(ele).parent().height() + $(ele).parent().offset().top;   //获取当前元素的父元素距离文档的top值加上父元素的高度(用来限制子元素在父元素的底部活动范围)--%>
-    <%--        let eleRelativePosition = $(ele).parent().height() - $(ele).height(); //获取fixed后子元素在父元素里面的活动范围(超出则改变子元素的fixed属性为relative,并赋值给子元素的relative的top上)--%>
-    <%--        let thisTop = $(ele).data("top");  //获取当前元素存储在元素属性当前的top值--%>
-    <%--        let margin_top = $(ele).data("margin-top").slice(0,$(ele).data("margin-top").length - 2);  //获取当前元素存储在元素dom属性上的margin-top值并截取掉除px的值--%>
-    <%--        let left = $(ele).offset().left;  //获取元素静态时距离页面左边的偏移量,用来设置fixed的left值--%>
-    <%--        if (scrollTop >= thisTop - margin_top) {--%>
-    <%--            $(ele).css({--%>
-    <%--                'position': 'fixed',--%>
-    <%--                'bottom': 'auto',--%>
-    <%--                'margin-top': '0px',--%>
-    <%--                'top': top + 'px',--%>
-    <%--                'left': left + 'px'--%>
-    <%--            })--%>
-    <%--        } else if (scrollTop <= thisTop + margin_top){--%>
-    <%--            $(ele).css({--%>
-    <%--                'position': 'static',--%>
-    <%--                'margin-top': margin_top + 'px',  //精确fixed的top值--%>
-    <%--                'top': '',--%>
-    <%--                'left': ''--%>
-    <%--            })--%>
-    <%--        }--%>
-    <%--        if ((parentTop - $(ele).height()) <= scrollTop) {--%>
-    <%--            $(ele).css({--%>
-    <%--                'position': 'relative',--%>
-    <%--                'margin-top': '0px',--%>
-    <%--                'top': eleRelativePosition,--%>
-    <%--                'left': ''--%>
-    <%--            })--%>
-    <%--        }--%>
-    <%--    };--%>
-
-    <%--    //如果当前浏览器不兼容position: sticky,属性--%>
-    <%--    if (!sticky) {--%>
-    <%--        //每次滚动就监测调用divViewHeight()方法,判断是否到达触发点--%>
-    <%--        $(window).on('scroll',function() {--%>
-    <%--            divFixedTop('.table_self_define',0);--%>
-    <%--        })--%>
-    <%--    }--%>
-    <%--</script>--%>
 </head>
 
 <body>
-<div class="fixed-table-box row-col-fixed">
+<c:set var="rowNum">20</c:set>
+<div class="fixed-table-box row-col-fixed fileds[{}]">
     <%-- 表头 --%>
     <div class="fixed-table_header-wraper">
-        <table class="fixed-table_header">
+        <table class="fixed-table_header"><colgroup></colgroup>
             <thead>
             <tr>
-                <th data-fixed="true">
-                    <div class="table-cell">序号</div>
+                <th rowspan="2" data-fixed="true" data-width="60px">
+                    <div class="">序号</div>
                 </th>
+                <c:forEach var="i" begin="1" end="${colNum}" step="1">
                 <th>
-                    <div class="table-cell">标题1</div>
+                    <div class="table-cell">标题${i}</div>
                 </th>
-                <th>
-                    <div class="table-cell">标题2</div>
-                </th>
-                <th>
-                    <div class="table-cell">标题3</div>
-                </th>
-                <th>
-                    <div class="table-cell">标题4</div>
-                </th>
-                <th>
-                    <div class="table-cell">标题5</div>
-                </th>
-                <th>
-                    <div class="table-cell">标题6</div>
-                </th>
-                <th>
-                    <div class="table-cell">标题7</div>
-                </th>
+                </c:forEach>
                 <th>
                     <div class="table-cell">操作</div>
                 </th>
@@ -175,38 +97,22 @@
     <%-- 表体 --%>
     <div class="fixed-table_body-wraper">
         <table class="fixed-table_body">
-            <% for (int i = 0; i < 20; i++) { %>
+            <c:forEach var="i" begin="1" end="${rowNum}" step="1">
             <tr>
                 <td>
-                    <div class="table-cell"><%=i + 1%>
+                    <div class="table-cell">${i}
                     </div>
                 </td>
+                <c:forEach var="j" begin="1" end="${colNum}" step="1">
                 <td>
-                    <div class="table-cell">内容1</div>
+                    <div class="table-cell">内容${j}</div>
                 </td>
-                <td>
-                    <div class="table-cell">内容2</div>
-                </td>
-                <td>
-                    <div class="table-cell">内容3</div>
-                </td>
-                <td>
-                    <div class="table-cell">内容4</div>
-                </td>
-                <td>
-                    <div class="table-cell">内容5</div>
-                </td>
-                <td>
-                    <div class="table-cell">内容6</div>
-                </td>
-                <td>
-                    <div class="table-cell">内容7</div>
-                </td>
+                </c:forEach>
                 <td>
                     <div class="table-cell"><a href="#">修改</a></div>
                 </td>
             </tr>
-            <% } %>
+            </c:forEach>
         </table>
     </div>
 
@@ -216,8 +122,8 @@
             <table class="fixed-table_header">
                 <thead>
                 <tr>
-                    <th>
-                        <div class="table-cell">序号</div>
+                    <th rowspan="2" data-fixed="true" data-width="60px">
+                        <div class="" style="background: darkred">序号</div>
                     </th>
                 </tr>
                 </thead>
@@ -227,19 +133,35 @@
         <div class="fixed-table_body-wraper">
             <table class="fixed-table_body">
                 <tbody>
-                <% for (int i = 0; i < 20; i++) { %>
+                <c:forEach var="i" begin="1" end="${rowNum}" step="1">
                 <tr class="">
                     <td>
-                        <div class="table-cell">序号<%=i + 1%>
+                        <div class="table-cell">序号${i}
                         </div>
                     </td>
                 </tr>
-                <% } %>
+                </c:forEach>
                 </tbody>
             </table>
         </div>
     </div>
     <!-- 固定列 start -->
+
+        <!-- 固定最右列 start -->
+        <div class="fixed-table_fixed fixed-table_fixed-right no-shadow">
+            <div class="fixed-table_header-wraper">
+                <table class="fixed-table_header" style="width: 60px">
+                    <thead>
+                    <tr>
+                        <th>
+                            <div class="table-cell">操作</div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <!-- 固定列 start -->
 </div>
 
 <script>
