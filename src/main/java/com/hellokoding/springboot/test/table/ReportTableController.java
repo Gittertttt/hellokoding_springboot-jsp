@@ -33,4 +33,15 @@ public class ReportTableController {
     public String reportTableTestByeaysui() {
         return "jsp/report/easyuitable";
     }
+
+    @RequestMapping("/test/table/dynamiccoltable")
+    public String dynamicColReportTableTestByEaysui() {
+        return "jsp/report/dynamicColumnTable";
+    }
+
+    @RequestMapping("/test/table/datatableExampleOne")
+    public String reportTableTestByDatatableExapmle() {
+        return "jsp/datatable/firstexample";
+    }
+
 }
